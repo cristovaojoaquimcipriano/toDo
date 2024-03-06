@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription,CardFooter,CardHeader,CardTitle } from './components/ui/card'
 import { Input } from './components/ui/input'
 import { Button } from './components/ui/button'
+import { log } from 'console'
 
 
 function App() {
@@ -21,22 +22,29 @@ function App() {
     setTasks(newTasks)
   }
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log(e.key)
+    if (e.key === 'Enter') {
+      handleAddTask()
+    }
+  }
+
   return (
-    <main className='xl:grid xl:grid-cols-2'>
-      <div>
+    <main className='xl:grid xl:grid-cols-2 bg-slate-900 w-full h-[100vh]'>
+      <div className='self-end'>
         <Card>
           <CardHeader>
             <CardTitle>Tarefas</CardTitle>
             <CardDescription>Faça a gestão de suas tarefas de forma simples.</CardDescription>
           </CardHeader>
           <CardContent className='space-y-2'>
-            <Input onChange={e=> setTask(e.target.value)}  value={task} placeholder='Digite a tarefa' />
+            <Input onKeyDown={handleKeyPress} onChange={e=> setTask(e.target.value)}  value={task} placeholder='Digite a tarefa' />
             <Button onClick={handleAddTask}>Adicionar</Button>
           </CardContent>
         </Card>
       </div>
 
-      <div className=''>
+      <div className="bg-slate-700" >
         {
           tasks.length > 0 ? (
             <Card>
@@ -48,7 +56,7 @@ function App() {
             {tasks.map((task, index) => (
               <div key={index} className='flex justify-between items-center'>
                 <span>{task}</span>
-                <Button onClick={() => handleRemoveTask(index)}>Remover</Button>
+                <Button onClick={() => handleRemoveTask(index)}>Rejmover</Button>
               </div>
             ))}
           </CardContent>
