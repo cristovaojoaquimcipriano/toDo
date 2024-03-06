@@ -1,34 +1,62 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Card, CardContent, CardDescription,CardFooter,CardHeader,CardTitle } from './components/ui/card'
+import { Input } from './components/ui/input'
+import { Button } from './components/ui/button'
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  
+  const [tasks, setTasks] = useState<string[]>([])
+  const [task, setTask] = useState('');
+
+  const handleAddTask = () => {
+    if (task) {
+      setTasks([...tasks, task])
+      setTask('')
+    }
+  }
+
+  const handleRemoveTask = (index: number) => {
+    const newTasks = tasks.filter((_, i) => i !== index)
+    setTasks(newTasks)
+  }
 
   return (
-    <>
+    <main className='xl:grid xl:grid-cols-2'>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Card>
+          <CardHeader>
+            <CardTitle>Tarefas</CardTitle>
+            <CardDescription>Faça a gestão de suas tarefas de forma simples.</CardDescription>
+          </CardHeader>
+          <CardContent className='space-y-2'>
+            <Input onChange={e=> setTask(e.target.value)}  value={task} placeholder='Digite a tarefa' />
+            <Button onClick={handleAddTask}>Adicionar</Button>
+          </CardContent>
+        </Card>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <div className=''>
+        {
+          tasks.length > 0 ? (
+            <Card>
+          <CardHeader>
+            <CardTitle>Lista de Tarefas</CardTitle>
+          </CardHeader>
+
+          <CardContent className='space-y-2'>
+            {tasks.map((task, index) => (
+              <div key={index} className='flex justify-between items-center'>
+                <span>{task}</span>
+                <Button onClick={() => handleRemoveTask(index)}>Remover</Button>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+          ): <></>
+        }
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </main>
   )
 }
 
